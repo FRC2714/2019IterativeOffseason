@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.Oblarg:command-rewrite-jitpack:1.4.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.Oblarg/command-rewrite-jitpack/1.4.0/5102af119786ad10a83663c581b43b4b0dd013cf/command-rewrite-jitpack-1.4.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.Oblarg/command-rewrite-jitpack/1.4.0/209e3577905fd63ccf3c5280bb806efb97ea7398/command-rewrite-jitpack-1.4.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
