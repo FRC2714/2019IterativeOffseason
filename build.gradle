@@ -55,7 +55,7 @@ dependencies {
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
     testCompile 'junit:junit:4.12'
-    implementation 'com.github.Oblarg:command-rewrite-jitpack:1.4.0'
+    compile 'com.github.Oblarg:command-rewrite-jitpack:-fb950f049d-1'
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

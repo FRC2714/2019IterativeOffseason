@@ -8,7 +8,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: com.github.Oblarg:command-rewrite-jitpack:1.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.Oblarg:command-rewrite-jitpack:-fb950f049d-1" level="project" />
     <orderEntry type="library" name="Gradle: edu.wpi.first.wpilibj:wpilibj-java:2019.4.1" level="project" />
     <orderEntry type="library" name="Gradle: edu.wpi.first.ntcore:ntcore-java:2019.4.1" level="project" />
     <orderEntry type="library" name="Gradle: edu.wpi.first.wpiutil:wpiutil-java:2019.4.1" level="project" />
