@@ -11,14 +11,15 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SendableBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.frc2.command.Command;
+import edu.wpi.first.wpilibj.frc2.command.SendableSubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.robot.RobotMap;
 import frc.robot.util.DrivingController;
 import frc.robot.util.Odometer;
 
-public class Drivetrain extends SendableBase {
+public class Drivetrain extends SendableSubsystemBase {
 
 	// Drivetrain motors
 	private CANSparkMax lMotor0 = new CANSparkMax(1, MotorType.kBrushless);
@@ -71,6 +72,7 @@ public class Drivetrain extends SendableBase {
 	NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
 	public Drivetrain(){
+
 		drive.setSafetyEnabled(false);
 		// Configure follow mode
 		lMotor1.follow(lMotor0);
@@ -176,14 +178,6 @@ public class Drivetrain extends SendableBase {
 
 		lMotor0.set(0);
 		rMotor0.set(0);
-	}
-
-
-
-
-	@Override
-	public void initSendable(SendableBuilder builder) {
-
 	}
 
 	// General arcade drive
@@ -296,4 +290,8 @@ public class Drivetrain extends SendableBase {
 				maxAcceleration, maxVelocity, startVelocity, endVelocity, false);
 	}
 
+	@Override
+	public void setDefaultCommand(Command defaultCommand) {
+
+	}
 }
