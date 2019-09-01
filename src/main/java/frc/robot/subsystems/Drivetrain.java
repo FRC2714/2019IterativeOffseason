@@ -11,15 +11,25 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.frc2.command.Command;
 import edu.wpi.first.wpilibj.frc2.command.SendableSubsystemBase;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.robot.RobotMap;
+import frc.robot.StateMachine;
 import frc.robot.util.DrivingController;
 import frc.robot.util.Odometer;
 
 public class Drivetrain extends SendableSubsystemBase {
+
+	private static Drivetrain drivetrainInstance = null;
+
+	public static Drivetrain getInstance(){
+		if(drivetrainInstance == null)
+			drivetrainInstance = new Drivetrain();
+
+		return drivetrainInstance;
+	}
 
 	// Drivetrain motors
 	private CANSparkMax lMotor0 = new CANSparkMax(1, MotorType.kBrushless);
@@ -58,7 +68,7 @@ public class Drivetrain extends SendableSubsystemBase {
 	// Ramp code
 	private double currentOpenArcadePower;
 
-	private boolean driverControlled = false;
+	StateMachine.RobotControl = StateMachine.RobotControl.DRIVERCONTROL;
 
 	// Gearbox encoders
 	private Encoder leftShaftEncoder = new Encoder(RobotMap.p_leftEncoderA, RobotMap.p_leftEncoderB, true, CounterBase.EncodingType.k4X);
@@ -125,6 +135,7 @@ public class Drivetrain extends SendableSubsystemBase {
 		rMotor0.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
 		drivingController.clearControlPath();
+
 	}
 
 	// Instantiate odometer and link in encoders and navX
@@ -290,8 +301,4 @@ public class Drivetrain extends SendableSubsystemBase {
 				maxAcceleration, maxVelocity, startVelocity, endVelocity, false);
 	}
 
-	@Override
-	public void setDefaultCommand(Command defaultCommand) {
-
-	}
 }

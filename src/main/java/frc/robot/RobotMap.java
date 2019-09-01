@@ -19,4 +19,5 @@ public class RobotMap {
 	public static int p_shoulderEncoderB = 5;
 	public static int p_wristEncoderA = 6;
 	public static int p_wristEncoderB = 7;
+
 }
