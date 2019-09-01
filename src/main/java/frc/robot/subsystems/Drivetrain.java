@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.frc2.command.Command;
 import edu.wpi.first.wpilibj.frc2.command.SendableSubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.StateMachine;
+import frc.robot.commands.drivetrain.DriverControl;
 import frc.robot.util.DrivingController;
 import frc.robot.util.Odometer;
 
@@ -68,7 +69,6 @@ public class Drivetrain extends SendableSubsystemBase {
 	// Ramp code
 	private double currentOpenArcadePower;
 
-	StateMachine.RobotControl = StateMachine.RobotControl.DRIVERCONTROL;
 
 	// Gearbox encoders
 	private Encoder leftShaftEncoder = new Encoder(RobotMap.p_leftEncoderA, RobotMap.p_leftEncoderB, true, CounterBase.EncodingType.k4X);
@@ -82,6 +82,7 @@ public class Drivetrain extends SendableSubsystemBase {
 	NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
 	public Drivetrain(){
+		setDefaultCommand(new DriverControl());
 
 		drive.setSafetyEnabled(false);
 		// Configure follow mode
@@ -180,6 +181,11 @@ public class Drivetrain extends SendableSubsystemBase {
 			closedLoopArcade(power, pivot);
 		}
 	};
+
+	@Override
+	public void periodic() {
+
+	}
 
 	public void destruct() {
 		driverControlled = false;

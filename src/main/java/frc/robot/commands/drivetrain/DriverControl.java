@@ -5,8 +5,11 @@ import frc.robot.subsystems.Drivetrain;
 
 public class DriverControl extends SendableCommandBase {
 
-	public DriverControl(){
-		addRequirements(Drivetrain.getInstance());
+	Drivetrain drivesystem;
+
+	public DriverControl(Drivetrain drivetrain){
+		drivesystem = drivetrain;
+		addRequirements(drivesystem);
 	}
 
 	@Override
