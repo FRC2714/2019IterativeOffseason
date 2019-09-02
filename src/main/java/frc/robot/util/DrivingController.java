@@ -8,7 +8,7 @@ public abstract class DrivingController {
 	 * Controls the magnitude of angular correction
 	 * Corrects both the anglular and perpendicular error
 	 */
-	// Samson control was originally at 0.25 * 0.6
+	// Samson motionControl was originally at 0.25 * 0.6
 	private PID samsonControl = new PID(0.06, 0.0001, 0.0);
 	private double samsonOutput;
 
@@ -72,7 +72,7 @@ public abstract class DrivingController {
 			pathFinished = true;
 		}
 
-		// Use tangential correction and velocity control cascaded to control velocity and position.
+		// Use tangential correction and velocity motionControl cascaded to motionControl velocity and position.
 		double orthogonalError = controlPath.get(iterator).getOrthogonalDisplacement(currentX, currentY);
 		double tangentialError = controlPath.get(iterator).getTangentialDisplacement(currentX, currentY);
 		double angularError = controlPath.get(iterator).getAngularDisplacement(currentAngle);

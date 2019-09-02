@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/2019IterativeOffseason.iml" filepath="$PROJECT_DIR$/.idea/modules/2019IterativeOffseason.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/2019IterativeOffseason.iml" filepath="$PROJECT_DIR$/.idea/modules/2019IterativeOffseason.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/2019IterativeOffseason_main.iml" filepath="$PROJECT_DIR$/.idea/modules/2019IterativeOffseason_main.iml" group="2019IterativeOffseason" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/2019IterativeOffseason_test.iml" filepath="$PROJECT_DIR$/.idea/modules/2019IterativeOffseason_test.iml" group="2019IterativeOffseason" />
     </modules>

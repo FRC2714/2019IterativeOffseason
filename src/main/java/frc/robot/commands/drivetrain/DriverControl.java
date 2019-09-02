@@ -1,6 +1,8 @@
 package frc.robot.commands.drivetrain;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.frc2.command.SendableCommandBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.Drivetrain;
 
 public class DriverControl extends SendableCommandBase {
@@ -22,12 +24,15 @@ public class DriverControl extends SendableCommandBase {
 		double power = 0;
 		double pivot = 0;
 
-		if (Math.abs(controlsProcessor.getLeftJoystick()) > .15)
-			power = controlsProcessor.getLeftJoystick();
-		if (Math.abs(controlsProcessor.getRightJoystick()) > .15)
-			pivot = controlsProcessor.getRightJoystick();
+		double yAxisLeft = Robot.oi.getDriverController().getYAxis(GenericHID.Hand.kLeft);
+		double xAxisRight = Robot.oi.getDriverController().getXAxis(GenericHID.Hand.kRight);
 
-		arcadeDrive(-power, pivot, 0.04, 0.08);
+		if (Math.abs(yAxisLeft) > .15)
+			power = yAxisLeft;
+		if (Math.abs(xAxisRight) > .15)
+			pivot = xAxisRight;
+
+		drivesystem.arcadeDrive(-power, pivot, 0.04, 0.08);
 		// System.out.println("Right Encoder: " + rightShaftEncoder.getDistance() + "\tLeft Encoder: " + leftShaftEncoder.getDistance());
 		// System.out.println("X = " + odometer.getCurrentX() + "|| Y = " + odometer.getCurrentY());
 
@@ -36,7 +41,7 @@ public class DriverControl extends SendableCommandBase {
 
 	@Override
 	public boolean isFinished() {
-		return !driverControlled;
+		return false; //return !driverControlled?
 	}
 
 	@Override

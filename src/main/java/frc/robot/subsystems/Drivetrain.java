@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 import edu.wpi.first.networktables.NetworkTable;
@@ -11,15 +10,15 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.frc2.command.Command;
 import edu.wpi.first.wpilibj.frc2.command.SendableSubsystemBase;
 import frc.robot.RobotMap;
-import frc.robot.StateMachine;
 import frc.robot.commands.drivetrain.DriverControl;
 import frc.robot.util.DrivingController;
 import frc.robot.util.Odometer;
+
+import static frc.robot.StateMachine.*;
+
 
 public class Drivetrain extends SendableSubsystemBase {
 
@@ -69,6 +68,7 @@ public class Drivetrain extends SendableSubsystemBase {
 	// Ramp code
 	private double currentOpenArcadePower;
 
+	public static RobotControl motionControl = RobotControl.DRIVERCONTROL;
 
 	// Gearbox encoders
 	private Encoder leftShaftEncoder = new Encoder(RobotMap.p_leftEncoderA, RobotMap.p_leftEncoderB, true, CounterBase.EncodingType.k4X);
@@ -82,7 +82,7 @@ public class Drivetrain extends SendableSubsystemBase {
 	NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
 	public Drivetrain(){
-		setDefaultCommand(new DriverControl());
+		setDefaultCommand(new DriverControl(getInstance()));
 
 		drive.setSafetyEnabled(false);
 		// Configure follow mode
@@ -174,7 +174,7 @@ public class Drivetrain extends SendableSubsystemBase {
 		}
 
 		/**
-		 * Link autonomous driving controller to the drive train motor control
+		 * Link autonomous driving controller to the drive train motor motionControl
 		 */
 		@Override
 		public void driveRobot(double power, double pivot) {
@@ -188,7 +188,7 @@ public class Drivetrain extends SendableSubsystemBase {
 	}
 
 	public void destruct() {
-		driverControlled = false;
+		motionControl = RobotControl.NODRIVERINPUT;
 
 		lMotor0.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		rMotor0.setIdleMode(CANSparkMax.IdleMode.kBrake);
