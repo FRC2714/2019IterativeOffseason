@@ -9,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.frc2.command.SendableSubsystemBase;
@@ -78,6 +79,7 @@ public class Drivetrain extends SendableSubsystemBase {
 	// NavX gyro
 	private AHRS navX = new AHRS(SPI.Port.kMXP);
 
+
 	//limelight
 	NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -137,6 +139,7 @@ public class Drivetrain extends SendableSubsystemBase {
 
 		drivingController.clearControlPath();
 
+		periodicRun.startPeriodic(0.01);
 	}
 
 	// Instantiate odometer and link in encoders and navX
@@ -182,10 +185,15 @@ public class Drivetrain extends SendableSubsystemBase {
 		}
 	};
 
-	@Override
-	public void periodic() {
+	//Notifier for periodic odometer and driving controller update
+	Notifier periodicRun = new Notifier(() -> {
+		// Run every time
+		this.odometer.integratePosition();
 
-	}
+		if (motionControl == RobotControl.PATHTRACKING)
+			this.drivingController.run();
+	});
+
 
 	public void destruct() {
 		motionControl = RobotControl.NODRIVERINPUT;

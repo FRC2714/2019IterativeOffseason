@@ -3,7 +3,7 @@ package frc.robot;
 public class StateMachine {
 
 	public enum RobotControl{
-		DRIVERCONTROL, NODRIVERINPUT
+		DRIVERCONTROL, NODRIVERINPUT, PATHTRACKING
 	}
 
 }
