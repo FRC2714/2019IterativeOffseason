@@ -16,22 +16,22 @@ import frc.robot.subsystems.Drivetrain;
 
 public class Robot extends TimedRobot {
 
-  private static Drivetrain drivetrain = Drivetrain.getInstance();
-  public static OI oi = OI.getInstance();
+	private static Drivetrain drivetrain = Drivetrain.getInstance();
+	public static OI oi = OI.getInstance();
 
-  @Override
-  public void robotInit() {
-  }
+	@Override
+	public void robotInit() {
+	}
 
-  @Override
-  public void robotPeriodic() {
+	@Override
+	public void robotPeriodic() {
 
-  }
+	}
 
-  @Override
-  public void autonomousInit() {
+	@Override
+	public void autonomousInit() {
 
-  }
+	}
 
 	@Override
 	public void disabledPeriodic() {
@@ -39,19 +39,19 @@ public class Robot extends TimedRobot {
 	}
 
 	@Override
-  public void autonomousPeriodic() {
-	  Scheduler.getInstance().run();
+	public void autonomousPeriodic() {
+		Scheduler.getInstance().run();
 
-  }
+	}
 
-  @Override
-  public void teleopPeriodic() {
-	  Scheduler.getInstance().run();
-  }
+	@Override
+	public void teleopPeriodic() {
+		Scheduler.getInstance().run();
+	}
 
 
-  @Override
-  public void testPeriodic() {
-	  Scheduler.getInstance().run();
-  }
+	@Override
+	public void testPeriodic() {
+		Scheduler.getInstance().run();
+	}
 }
