@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.frc2.command.SendableSubsystemBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.commands.drivetrain.DriverControl;
 import frc.robot.util.DrivingController;
@@ -21,7 +21,7 @@ import frc.robot.util.Odometer;
 import static frc.robot.StateMachine.*;
 
 
-public class Drivetrain extends SendableSubsystemBase {
+public class Drivetrain extends SubsystemBase {
 
 	private static Drivetrain drivetrainInstance = null;
 

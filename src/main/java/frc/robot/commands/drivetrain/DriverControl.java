@@ -1,11 +1,11 @@
 package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.frc2.command.SendableCommandBase;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.Drivetrain;
 
-public class DriverControl extends SendableCommandBase {
+public class DriverControl extends CommandBase {
 
 	Drivetrain drivesystem;
 
