@@ -69,7 +69,7 @@ public class Drivetrain extends SubsystemBase {
 	// Ramp code
 	private double currentOpenArcadePower;
 
-	public static RobotControl motionControl = RobotControl.DRIVERCONTROL;
+	public static DrivetrainState motionControl = DrivetrainState.DRIVERCONTROL;
 
 	// Gearbox encoders
 	private Encoder leftShaftEncoder = new Encoder(RobotMap.p_leftEncoderA, RobotMap.p_leftEncoderB, true, CounterBase.EncodingType.k4X);
@@ -190,13 +190,13 @@ public class Drivetrain extends SubsystemBase {
 		// Run every time
 		this.odometer.integratePosition();
 
-		if (motionControl == RobotControl.PATHTRACKING)
+		if (motionControl == DrivetrainState.PATHTRACKING)
 			this.drivingController.run();
 	});
 
 
 	public void destruct() {
-		motionControl = RobotControl.NODRIVERINPUT;
+		motionControl = DrivetrainState.NODRIVERINPUT;
 
 		lMotor0.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		rMotor0.setIdleMode(CANSparkMax.IdleMode.kBrake);

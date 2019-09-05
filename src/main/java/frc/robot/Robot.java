@@ -17,7 +17,7 @@ import frc.robot.subsystems.Drivetrain;
 public class Robot extends TimedRobot {
 
 	private static Drivetrain drivetrain = Drivetrain.getInstance();
-	public static OI oi = OI.getInstance();
+	private static OI oi = OI.getInstance();
 
 	@Override
 	public void robotInit() {

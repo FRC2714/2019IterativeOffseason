@@ -2,6 +2,7 @@ package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.subsystems.Drivetrain;
 
@@ -24,8 +25,8 @@ public class DriverControl extends CommandBase {
 		double power = 0;
 		double pivot = 0;
 
-		double yAxisLeft = Robot.oi.getDriverController().getYAxis(GenericHID.Hand.kLeft);
-		double xAxisRight = Robot.oi.getDriverController().getXAxis(GenericHID.Hand.kRight);
+		double yAxisLeft = OI.getInstance().getDriverController().getYAxis(GenericHID.Hand.kLeft);
+		double xAxisRight = OI.getInstance().getDriverController().getXAxis(GenericHID.Hand.kRight);
 
 		if (Math.abs(yAxisLeft) > .15)
 			power = yAxisLeft;
