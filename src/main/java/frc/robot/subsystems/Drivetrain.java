@@ -23,7 +23,7 @@ import static frc.robot.StateMachine.*;
 
 public class Drivetrain extends SubsystemBase {
 
-	private static Drivetrain drivetrainInstance = null;
+	public static Drivetrain drivetrainInstance = null;
 
 	public static Drivetrain getInstance(){
 		if(drivetrainInstance == null)
@@ -72,9 +72,9 @@ public class Drivetrain extends SubsystemBase {
 	public static DrivetrainState motionControl = DrivetrainState.DRIVERCONTROL;
 
 	// Gearbox encoders
-	private Encoder leftShaftEncoder = new Encoder(RobotMap.p_leftEncoderA, RobotMap.p_leftEncoderB, true, CounterBase.EncodingType.k4X);
-	private Encoder rightShaftEncoder = new Encoder(RobotMap.p_rightEncoderA, RobotMap.p_rightEncoderB, true,
-			CounterBase.EncodingType.k4X);
+	private Encoder leftShaftEncoder; //= new Encoder(RobotMap.p_leftEncoderA, RobotMap.p_leftEncoderB, true, CounterBase.EncodingType.k4X);
+	private Encoder rightShaftEncoder; //= new Encoder(RobotMap.p_rightEncoderA, RobotMap.p_rightEncoderB, true,
+			//CounterBase.EncodingType.k4X);
 
 	// NavX gyro
 	private AHRS navX = new AHRS(SPI.Port.kMXP);
@@ -83,10 +83,13 @@ public class Drivetrain extends SubsystemBase {
 	//limelight
 	NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-	public Drivetrain(){
-		setDefaultCommand(new DriverControl(getInstance()));
+	private Drivetrain(){
 
 		drive.setSafetyEnabled(false);
+
+		leftShaftEncoder = new Encoder(RobotMap.p_leftEncoderA, RobotMap.p_leftEncoderB, true, CounterBase.EncodingType.k4X);
+		rightShaftEncoder = new Encoder(RobotMap.p_rightEncoderA, RobotMap.p_rightEncoderB, true, CounterBase.EncodingType.k4X);
+
 		// Configure follow mode
 		lMotor1.follow(lMotor0);
 		lMotor2.follow(lMotor0);
@@ -123,7 +126,7 @@ public class Drivetrain extends SubsystemBase {
 		navX.reset();
 		navX.zeroYaw();
 
-		odometer.reset();
+//		odometer.reset();
 
 		currentOpenArcadePower = 0;
 
@@ -137,62 +140,63 @@ public class Drivetrain extends SubsystemBase {
 		lMotor0.setIdleMode(CANSparkMax.IdleMode.kCoast);
 		rMotor0.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
-		drivingController.clearControlPath();
+//		drivingController.clearControlPath();
 
-		periodicRun.startPeriodic(0.01);
+//		periodicRun.startPeriodic(0.01);
+//		setDefaultCommand(new DriverControl(drivetrainInstance));
 	}
 
 	// Instantiate odometer and link in encoders and navX
-	public Odometer odometer = new Odometer(0,0,0) {
-
-		@Override
-		public void updateEncodersAndHeading() {
-			this.headingAngle = -navX.getYaw() + 90;
-			if(this.headingAngle < 0) {
-				this.headingAngle += 360;
-			}
-
-			this.leftPos = leftShaftEncoder.getDistance();
-			this.rightPos = rightShaftEncoder.getDistance();
-
-			double leftVelocity = leftShaftEncoder.getRate();
-			double rightVelocity = rightShaftEncoder.getRate();
-
-			this.currentAverageVelocity = (leftVelocity + rightVelocity) / 2;
-		}
-	};
+//	public Odometer odometer = new Odometer(0,0,0) {
+//
+//		@Override
+//		public void updateEncodersAndHeading() {
+//			this.headingAngle = -navX.getYaw() + 90;
+//			if(this.headingAngle < 0) {
+//				this.headingAngle += 360;
+//			}
+//
+//			this.leftPos = leftShaftEncoder.getDistance();
+//			this.rightPos = rightShaftEncoder.getDistance();
+//
+//			double leftVelocity = leftShaftEncoder.getRate();
+//			double rightVelocity = rightShaftEncoder.getRate();
+//
+//			this.currentAverageVelocity = (leftVelocity + rightVelocity) / 2;
+//		}
+//	};
 
 	// Instantiate point controller for autonomous driving
-	public DrivingController drivingController = new DrivingController(0.01) {
-
-		/**
-		 * Use output from odometer and pass into autonomous driving controller
-		 */
-		@Override
-		public void updateVariables(){
-			this.currentX = odometer.getCurrentX();
-			this.currentY = odometer.getCurrentY();
-			this.currentAngle = odometer.getHeadingAngle();
-			this.currentAverageVelocity = odometer.getCurrentAverageVelocity();
-		}
-
-		/**
-		 * Link autonomous driving controller to the drive train motor motionControl
-		 */
-		@Override
-		public void driveRobot(double power, double pivot) {
-			closedLoopArcade(power, pivot);
-		}
-	};
+//	public DrivingController drivingController = new DrivingController(0.01) {
+//
+//		/**
+//		 * Use output from odometer and pass into autonomous driving controller
+//		 */
+//		@Override
+//		public void updateVariables(){
+//			this.currentX = odometer.getCurrentX();
+//			this.currentY = odometer.getCurrentY();
+//			this.currentAngle = odometer.getHeadingAngle();
+//			this.currentAverageVelocity = odometer.getCurrentAverageVelocity();
+//		}
+//
+//		/**
+//		 * Link autonomous driving controller to the drive train motor motionControl
+//		 */
+//		@Override
+//		public void driveRobot(double power, double pivot) {
+//			closedLoopArcade(power, pivot);
+//		}
+//	};
 
 	//Notifier for periodic odometer and driving controller update
-	Notifier periodicRun = new Notifier(() -> {
-		// Run every time
-		this.odometer.integratePosition();
-
-		if (motionControl == DrivetrainState.PATHTRACKING)
-			this.drivingController.run();
-	});
+//	Notifier periodicRun = new Notifier(() -> {
+//		// Run every time
+//		this.odometer.integratePosition();
+//
+//		if (motionControl == DrivetrainState.PATHTRACKING)
+//			this.drivingController.run();
+//	});
 
 
 	public void destruct() {
@@ -219,6 +223,7 @@ public class Drivetrain extends SubsystemBase {
 		} else {
 			rampCalc(power, rampDown);
 		}
+		System.out.println("Running motion + " + currentOpenArcadePower);
 
 		// System.out.println("Current Arcade Power: " + currentOpenArcadePower + "\tCurrent Arcade Pivot: " + currentOpenArcadePivot);
 		arcadeDrive(currentOpenArcadePower, pivot);
@@ -279,40 +284,40 @@ public class Drivetrain extends SubsystemBase {
 		return maxVelocity;
 	}
 
-	public void addForwardSpline(double xInitial, double yInitial, double thetaInitial, double lInitial,
-	                             double xFinal, double yFinal, double thetaFinal, double lFinal, double maxAcceleration,
-	                             double maxVelocity, double startVelocity, double endVelocity) {
-
-		thetaInitial = Math.toRadians(thetaInitial);
-		thetaFinal = Math.toRadians(thetaFinal);
-
-		double x2 = lInitial * Math.cos(thetaInitial) + xInitial;
-		double x3 = lFinal * Math.cos(thetaFinal + Math.PI) + xFinal;
-		double y2 = lInitial * Math.sin(thetaInitial) + yInitial;
-		double y3 = lFinal * Math.sin(thetaFinal + Math.PI) + yFinal;
-
-		System.out.println("Forward Spline Generating");
-
-		drivingController.addSpline(xInitial, x2, x3, xFinal, yInitial, y2, y3, yFinal,
-				maxAcceleration, maxVelocity, startVelocity, endVelocity, true);
-	}
-
-	public void addBackwardsSpline(double xInitial, double yInitial, double thetaInitial, double lInitial,
-	                               double xFinal, double yFinal, double thetaFinal, double lFinal, double maxAcceleration,
-	                               double maxVelocity, double startVelocity, double endVelocity) {
-
-		thetaInitial = Math.toRadians(thetaInitial);
-		thetaFinal = Math.toRadians(thetaFinal);
-
-		double x2 = lInitial * Math.cos(thetaInitial + Math.PI) + xInitial;
-		double x3 = lFinal * Math.cos(thetaFinal) + xFinal;
-		double y2 = lInitial * Math.sin(thetaInitial + Math.PI) + yInitial;
-		double y3 = lFinal * Math.sin(thetaFinal) + yFinal;
-
-		System.out.println("Backwards Spline Generating");
-
-		drivingController.addSpline(xInitial, x2, x3, xFinal, yInitial, y2, y3, yFinal,
-				maxAcceleration, maxVelocity, startVelocity, endVelocity, false);
-	}
+//	public void addForwardSpline(double xInitial, double yInitial, double thetaInitial, double lInitial,
+//	                             double xFinal, double yFinal, double thetaFinal, double lFinal, double maxAcceleration,
+//	                             double maxVelocity, double startVelocity, double endVelocity) {
+//
+//		thetaInitial = Math.toRadians(thetaInitial);
+//		thetaFinal = Math.toRadians(thetaFinal);
+//
+//		double x2 = lInitial * Math.cos(thetaInitial) + xInitial;
+//		double x3 = lFinal * Math.cos(thetaFinal + Math.PI) + xFinal;
+//		double y2 = lInitial * Math.sin(thetaInitial) + yInitial;
+//		double y3 = lFinal * Math.sin(thetaFinal + Math.PI) + yFinal;
+//
+//		System.out.println("Forward Spline Generating");
+//
+//		drivingController.addSpline(xInitial, x2, x3, xFinal, yInitial, y2, y3, yFinal,
+//				maxAcceleration, maxVelocity, startVelocity, endVelocity, true);
+//	}
+//
+//	public void addBackwardsSpline(double xInitial, double yInitial, double thetaInitial, double lInitial,
+//	                               double xFinal, double yFinal, double thetaFinal, double lFinal, double maxAcceleration,
+//	                               double maxVelocity, double startVelocity, double endVelocity) {
+//
+//		thetaInitial = Math.toRadians(thetaInitial);
+//		thetaFinal = Math.toRadians(thetaFinal);
+//
+//		double x2 = lInitial * Math.cos(thetaInitial + Math.PI) + xInitial;
+//		double x3 = lFinal * Math.cos(thetaFinal) + xFinal;
+//		double y2 = lInitial * Math.sin(thetaInitial + Math.PI) + yInitial;
+//		double y3 = lFinal * Math.sin(thetaFinal) + yFinal;
+//
+//		System.out.println("Backwards Spline Generating");
+//
+//		drivingController.addSpline(xInitial, x2, x3, xFinal, yInitial, y2, y3, yFinal,
+//				maxAcceleration, maxVelocity, startVelocity, endVelocity, false);
+//	}
 
 }
