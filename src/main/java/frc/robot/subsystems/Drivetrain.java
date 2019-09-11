@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.commands.drivetrain.DriverControl;
 import frc.robot.util.DrivingController;
@@ -70,7 +69,7 @@ public class Drivetrain extends Subsystem {
 	// Ramp code
 	private double currentOpenArcadePower;
 
-	public static DrivetrainState motionControl = DrivetrainState.DRIVERCONTROL;
+	public drivetrainState motionControl = drivetrainState.DRIVERCONTROL;
 
 	// Gearbox encoders
 	public Encoder leftShaftEncoder;
@@ -140,7 +139,7 @@ public class Drivetrain extends Subsystem {
 		lMotor0.setIdleMode(CANSparkMax.IdleMode.kCoast);
 		rMotor0.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
-//		drivingController.clearControlPath();
+		drivingController.clearControlPath();
 
 		periodicRun.startPeriodic(0.01);
 	}
@@ -171,40 +170,40 @@ public class Drivetrain extends Subsystem {
 	};
 
 	// Instantiate point controller for autonomous driving
-//	public DrivingController drivingController = new DrivingController(0.01) {
-//
-//		/**
-//		 * Use output from odometer and pass into autonomous driving controller
-//		 */
-//		@Override
-//		public void updateVariables(){
-//			this.currentX = odometer.getCurrentX();
-//			this.currentY = odometer.getCurrentY();
-//			this.currentAngle = odometer.getHeadingAngle();
-//			this.currentAverageVelocity = odometer.getCurrentAverageVelocity();
-//		}
-//
-//		/**
-//		 * Link autonomous driving controller to the drive train motor motionControl
-//		 */
-//		@Override
-//		public void driveRobot(double power, double pivot) {
-//			closedLoopArcade(power, pivot);
-//		}
-//	};
+	public DrivingController drivingController = new DrivingController(0.01) {
+
+		/**
+		 * Use output from odometer and pass into autonomous driving controller
+		 */
+		@Override
+		public void updateVariables(){
+			this.currentX = odometer.getCurrentX();
+			this.currentY = odometer.getCurrentY();
+			this.currentAngle = odometer.getHeadingAngle();
+			this.currentAverageVelocity = odometer.getCurrentAverageVelocity();
+		}
+
+		/**
+		 * Link autonomous driving controller to the drive train motor motionControl
+		 */
+		@Override
+		public void driveRobot(double power, double pivot) {
+			closedLoopArcade(power, pivot);
+		}
+	};
 
 //	Notifier for periodic odometer and driving controller update
 	Notifier periodicRun = new Notifier(() -> {
 		// Run every time
 		this.odometer.integratePosition();
 
-//		if (motionControl == DrivetrainState.PATHTRACKING)
-//			this.drivingController.run();
+		if (motionControl == drivetrainState.PATHTRACKING)
+			this.drivingController.run();
 	});
 
 
 	public void destruct() {
-		motionControl = DrivetrainState.NODRIVERINPUT;
+		motionControl = drivetrainState.NODRIVERINPUT;
 
 		lMotor0.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		rMotor0.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -287,40 +286,40 @@ public class Drivetrain extends Subsystem {
 		return maxVelocity;
 	}
 
-//	public void addForwardSpline(double xInitial, double yInitial, double thetaInitial, double lInitial,
-//	                             double xFinal, double yFinal, double thetaFinal, double lFinal, double maxAcceleration,
-//	                             double maxVelocity, double startVelocity, double endVelocity) {
-//
-//		thetaInitial = Math.toRadians(thetaInitial);
-//		thetaFinal = Math.toRadians(thetaFinal);
-//
-//		double x2 = lInitial * Math.cos(thetaInitial) + xInitial;
-//		double x3 = lFinal * Math.cos(thetaFinal + Math.PI) + xFinal;
-//		double y2 = lInitial * Math.sin(thetaInitial) + yInitial;
-//		double y3 = lFinal * Math.sin(thetaFinal + Math.PI) + yFinal;
-//
-//		System.out.println("Forward Spline Generating");
-//
-//		drivingController.addSpline(xInitial, x2, x3, xFinal, yInitial, y2, y3, yFinal,
-//				maxAcceleration, maxVelocity, startVelocity, endVelocity, true);
-//	}
-//
-//	public void addBackwardsSpline(double xInitial, double yInitial, double thetaInitial, double lInitial,
-//	                               double xFinal, double yFinal, double thetaFinal, double lFinal, double maxAcceleration,
-//	                               double maxVelocity, double startVelocity, double endVelocity) {
-//
-//		thetaInitial = Math.toRadians(thetaInitial);
-//		thetaFinal = Math.toRadians(thetaFinal);
-//
-//		double x2 = lInitial * Math.cos(thetaInitial + Math.PI) + xInitial;
-//		double x3 = lFinal * Math.cos(thetaFinal) + xFinal;
-//		double y2 = lInitial * Math.sin(thetaInitial + Math.PI) + yInitial;
-//		double y3 = lFinal * Math.sin(thetaFinal) + yFinal;
-//
-//		System.out.println("Backwards Spline Generating");
-//
-//		drivingController.addSpline(xInitial, x2, x3, xFinal, yInitial, y2, y3, yFinal,
-//				maxAcceleration, maxVelocity, startVelocity, endVelocity, false);
-//	}
+	public void addForwardSpline(double xInitial, double yInitial, double thetaInitial, double lInitial,
+	                             double xFinal, double yFinal, double thetaFinal, double lFinal, double maxAcceleration,
+	                             double maxVelocity, double startVelocity, double endVelocity) {
+
+		thetaInitial = Math.toRadians(thetaInitial);
+		thetaFinal = Math.toRadians(thetaFinal);
+
+		double x2 = lInitial * Math.cos(thetaInitial) + xInitial;
+		double x3 = lFinal * Math.cos(thetaFinal + Math.PI) + xFinal;
+		double y2 = lInitial * Math.sin(thetaInitial) + yInitial;
+		double y3 = lFinal * Math.sin(thetaFinal + Math.PI) + yFinal;
+
+		System.out.println("Forward Spline Generating");
+
+		drivingController.addSpline(xInitial, x2, x3, xFinal, yInitial, y2, y3, yFinal,
+				maxAcceleration, maxVelocity, startVelocity, endVelocity, true);
+	}
+
+	public void addBackwardsSpline(double xInitial, double yInitial, double thetaInitial, double lInitial,
+	                               double xFinal, double yFinal, double thetaFinal, double lFinal, double maxAcceleration,
+	                               double maxVelocity, double startVelocity, double endVelocity) {
+
+		thetaInitial = Math.toRadians(thetaInitial);
+		thetaFinal = Math.toRadians(thetaFinal);
+
+		double x2 = lInitial * Math.cos(thetaInitial + Math.PI) + xInitial;
+		double x3 = lFinal * Math.cos(thetaFinal) + xFinal;
+		double y2 = lInitial * Math.sin(thetaInitial + Math.PI) + yInitial;
+		double y3 = lFinal * Math.sin(thetaFinal) + yFinal;
+
+		System.out.println("Backwards Spline Generating");
+
+		drivingController.addSpline(xInitial, x2, x3, xFinal, yInitial, y2, y3, yFinal,
+				maxAcceleration, maxVelocity, startVelocity, endVelocity, false);
+	}
 
 }

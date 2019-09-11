@@ -6,12 +6,15 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.Robot;
+import frc.robot.StateMachine;
 import frc.robot.subsystems.Drivetrain;
 
 public class DriverControl extends Command {
 
+	private Drivetrain drivetrainInstance = Drivetrain.getInstance();
+
 	public DriverControl(){
-		requires(Drivetrain.getInstance());
+		requires(drivetrainInstance);
 	}
 
 	@Override
@@ -32,11 +35,12 @@ public class DriverControl extends Command {
 		if (Math.abs(xAxisRight) > .15)
 			pivot = xAxisRight;
 
-		Drivetrain.getInstance().arcadeDrive(-power, pivot, 0.04, 0.08);
-		 System.out.println("Right Encoder: " + Drivetrain.getInstance().rightShaftEncoder.getDistance() + "\tLeft Encoder: " + Drivetrain.getInstance().leftShaftEncoder.getDistance());
-		 System.out.println("X = " + Drivetrain.getInstance().odometer.getCurrentX() + "|| Y = " + Drivetrain.getInstance().odometer.getCurrentY());
+		if(drivetrainInstance.motionControl == StateMachine.drivetrainState.DRIVERCONTROL)
+			Drivetrain.getInstance().arcadeDrive(-power, pivot, 0.04, 0.08);
+//		 System.out.println("Right Encoder: " + Drivetrain.getInstance().rightShaftEncoder.getDistance() + "\tLeft Encoder: " + Drivetrain.getInstance().leftShaftEncoder.getDistance());
+//		 System.out.println("X = " + Drivetrain.getInstance().odometer.getCurrentX() + "|| Y = " + Drivetrain.getInstance().odometer.getCurrentY());
 
-		// System.out.println("Odometer heading angle " + odometer.getHeadingAngle());
+//		 System.out.println("Odometer heading angle " + drivetrainInstance.odometer.getHeadingAngle());
 	}
 
 	@Override
@@ -44,10 +48,10 @@ public class DriverControl extends Command {
 		return false; //return !driverControlled?
 	}
 
-//	@Override
-//	public void end(boolean interrupted) {
-//		Drivetrain.getInstance().closedLoopArcade(0, 0);
-//	}
+	@Override
+	protected void end() {
+		Drivetrain.getInstance().closedLoopArcade(0, 0);
+	}
 
 
 }
