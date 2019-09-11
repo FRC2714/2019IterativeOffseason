@@ -10,11 +10,8 @@ import frc.robot.subsystems.Drivetrain;
 
 public class DriverControl extends Command {
 
-//	Drivetrain drivesystem;
-
 	public DriverControl(){
-//		drivesystem = drivetrain;
-//		addRequirements(Drivetrain.drivetrainInstance);
+		requires(Drivetrain.getInstance());
 	}
 
 	@Override
@@ -36,8 +33,8 @@ public class DriverControl extends Command {
 			pivot = xAxisRight;
 
 		Drivetrain.getInstance().arcadeDrive(-power, pivot, 0.04, 0.08);
-		// System.out.println("Right Encoder: " + rightShaftEncoder.getDistance() + "\tLeft Encoder: " + leftShaftEncoder.getDistance());
-		// System.out.println("X = " + odometer.getCurrentX() + "|| Y = " + odometer.getCurrentY());
+		 System.out.println("Right Encoder: " + Drivetrain.getInstance().rightShaftEncoder.getDistance() + "\tLeft Encoder: " + Drivetrain.getInstance().leftShaftEncoder.getDistance());
+		 System.out.println("X = " + Drivetrain.getInstance().odometer.getCurrentX() + "|| Y = " + Drivetrain.getInstance().odometer.getCurrentY());
 
 		// System.out.println("Odometer heading angle " + odometer.getHeadingAngle());
 	}

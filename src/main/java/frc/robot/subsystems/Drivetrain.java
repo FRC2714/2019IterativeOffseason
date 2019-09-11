@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -21,7 +22,7 @@ import frc.robot.util.Odometer;
 import static frc.robot.StateMachine.*;
 
 
-public class Drivetrain extends SubsystemBase {
+public class Drivetrain extends Subsystem {
 
 	public static Drivetrain drivetrainInstance = null;
 
@@ -72,9 +73,8 @@ public class Drivetrain extends SubsystemBase {
 	public static DrivetrainState motionControl = DrivetrainState.DRIVERCONTROL;
 
 	// Gearbox encoders
-	private Encoder leftShaftEncoder; //= new Encoder(RobotMap.p_leftEncoderA, RobotMap.p_leftEncoderB, true, CounterBase.EncodingType.k4X);
-	private Encoder rightShaftEncoder; //= new Encoder(RobotMap.p_rightEncoderA, RobotMap.p_rightEncoderB, true,
-			//CounterBase.EncodingType.k4X);
+	public Encoder leftShaftEncoder;
+	public Encoder rightShaftEncoder;
 
 	// NavX gyro
 	private AHRS navX = new AHRS(SPI.Port.kMXP);
@@ -83,7 +83,7 @@ public class Drivetrain extends SubsystemBase {
 	//limelight
 	NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-	private Drivetrain(){
+	public Drivetrain(){
 
 		drive.setSafetyEnabled(false);
 
@@ -126,7 +126,7 @@ public class Drivetrain extends SubsystemBase {
 		navX.reset();
 		navX.zeroYaw();
 
-//		odometer.reset();
+		odometer.reset();
 
 		currentOpenArcadePower = 0;
 
@@ -142,29 +142,33 @@ public class Drivetrain extends SubsystemBase {
 
 //		drivingController.clearControlPath();
 
-//		periodicRun.startPeriodic(0.01);
-//		setDefaultCommand(new DriverControl(drivetrainInstance));
+		periodicRun.startPeriodic(0.01);
 	}
 
-	// Instantiate odometer and link in encoders and navX
-//	public Odometer odometer = new Odometer(0,0,0) {
-//
-//		@Override
-//		public void updateEncodersAndHeading() {
-//			this.headingAngle = -navX.getYaw() + 90;
-//			if(this.headingAngle < 0) {
-//				this.headingAngle += 360;
-//			}
-//
-//			this.leftPos = leftShaftEncoder.getDistance();
-//			this.rightPos = rightShaftEncoder.getDistance();
-//
-//			double leftVelocity = leftShaftEncoder.getRate();
-//			double rightVelocity = rightShaftEncoder.getRate();
-//
-//			this.currentAverageVelocity = (leftVelocity + rightVelocity) / 2;
-//		}
-//	};
+	@Override
+	protected void initDefaultCommand() {
+		setDefaultCommand(new DriverControl());
+	}
+
+//	 Instantiate odometer and link in encoders and navX
+	public Odometer odometer = new Odometer(0,0,0) {
+
+		@Override
+		public void updateEncodersAndHeading() {
+			this.headingAngle = -navX.getYaw() + 90;
+			if(this.headingAngle < 0) {
+				this.headingAngle += 360;
+			}
+
+			this.leftPos = leftShaftEncoder.getDistance();
+			this.rightPos = rightShaftEncoder.getDistance();
+
+			double leftVelocity = leftShaftEncoder.getRate();
+			double rightVelocity = rightShaftEncoder.getRate();
+
+			this.currentAverageVelocity = (leftVelocity + rightVelocity) / 2;
+		}
+	};
 
 	// Instantiate point controller for autonomous driving
 //	public DrivingController drivingController = new DrivingController(0.01) {
@@ -189,14 +193,14 @@ public class Drivetrain extends SubsystemBase {
 //		}
 //	};
 
-	//Notifier for periodic odometer and driving controller update
-//	Notifier periodicRun = new Notifier(() -> {
-//		// Run every time
-//		this.odometer.integratePosition();
-//
+//	Notifier for periodic odometer and driving controller update
+	Notifier periodicRun = new Notifier(() -> {
+		// Run every time
+		this.odometer.integratePosition();
+
 //		if (motionControl == DrivetrainState.PATHTRACKING)
 //			this.drivingController.run();
-//	});
+	});
 
 
 	public void destruct() {
@@ -223,7 +227,6 @@ public class Drivetrain extends SubsystemBase {
 		} else {
 			rampCalc(power, rampDown);
 		}
-		System.out.println("Running motion + " + currentOpenArcadePower);
 
 		// System.out.println("Current Arcade Power: " + currentOpenArcadePower + "\tCurrent Arcade Pivot: " + currentOpenArcadePivot);
 		arcadeDrive(currentOpenArcadePower, pivot);
