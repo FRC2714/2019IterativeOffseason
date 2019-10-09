@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
+
 public class BBQController {
 
 	private XboxController xbox;

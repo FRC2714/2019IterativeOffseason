@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.commands.drivetrain.DriverControl;
 import frc.robot.util.DrivingController;
@@ -21,9 +21,9 @@ import frc.robot.util.Odometer;
 import static frc.robot.StateMachine.*;
 
 
-public class Drivetrain extends SubsystemBase {
+public class Drivetrain extends Subsystem {
 
-	private static Drivetrain drivetrainInstance = null;
+	public static Drivetrain drivetrainInstance = null;
 
 	public static Drivetrain getInstance(){
 		if(drivetrainInstance == null)
@@ -69,12 +69,11 @@ public class Drivetrain extends SubsystemBase {
 	// Ramp code
 	private double currentOpenArcadePower;
 
-	public static DrivetrainState motionControl = DrivetrainState.DRIVERCONTROL;
+	public drivetrainState motionControl = drivetrainState.DRIVERCONTROL;
 
 	// Gearbox encoders
-	private Encoder leftShaftEncoder = new Encoder(RobotMap.p_leftEncoderA, RobotMap.p_leftEncoderB, true, CounterBase.EncodingType.k4X);
-	private Encoder rightShaftEncoder = new Encoder(RobotMap.p_rightEncoderA, RobotMap.p_rightEncoderB, true,
-			CounterBase.EncodingType.k4X);
+	public Encoder leftShaftEncoder;
+	public Encoder rightShaftEncoder;
 
 	// NavX gyro
 	private AHRS navX = new AHRS(SPI.Port.kMXP);
@@ -84,9 +83,12 @@ public class Drivetrain extends SubsystemBase {
 	NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
 	public Drivetrain(){
-		setDefaultCommand(new DriverControl(getInstance()));
 
 		drive.setSafetyEnabled(false);
+
+		leftShaftEncoder = new Encoder(RobotMap.p_leftEncoderA, RobotMap.p_leftEncoderB, true, CounterBase.EncodingType.k4X);
+		rightShaftEncoder = new Encoder(RobotMap.p_rightEncoderA, RobotMap.p_rightEncoderB, true, CounterBase.EncodingType.k4X);
+
 		// Configure follow mode
 		lMotor1.follow(lMotor0);
 		lMotor2.follow(lMotor0);
@@ -142,7 +144,12 @@ public class Drivetrain extends SubsystemBase {
 		periodicRun.startPeriodic(0.01);
 	}
 
-	// Instantiate odometer and link in encoders and navX
+	@Override
+	protected void initDefaultCommand() {
+		setDefaultCommand(new DriverControl());
+	}
+
+//	 Instantiate odometer and link in encoders and navX
 	public Odometer odometer = new Odometer(0,0,0) {
 
 		@Override
@@ -185,18 +192,18 @@ public class Drivetrain extends SubsystemBase {
 		}
 	};
 
-	//Notifier for periodic odometer and driving controller update
+//	Notifier for periodic odometer and driving controller update
 	Notifier periodicRun = new Notifier(() -> {
 		// Run every time
 		this.odometer.integratePosition();
 
-		if (motionControl == DrivetrainState.PATHTRACKING)
+		if (motionControl == drivetrainState.PATHTRACKING)
 			this.drivingController.run();
 	});
 
 
 	public void destruct() {
-		motionControl = DrivetrainState.NODRIVERINPUT;
+		motionControl = drivetrainState.NODRIVERINPUT;
 
 		lMotor0.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		rMotor0.setIdleMode(CANSparkMax.IdleMode.kBrake);

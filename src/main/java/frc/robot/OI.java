@@ -1,5 +1,7 @@
 package frc.robot;
 
+import frc.robot.commands.drivetrain.DriverControl;
+import frc.robot.commands.drivetrain.SplineTester;
 import frc.robot.util.BBQController;
 
 public class OI {
@@ -15,6 +17,7 @@ public class OI {
 
 	public OI(){
 		driverController = new BBQController(0);
+		driverController.getAButton().whenPressed(new SplineTester());
 	}
 
 	public BBQController getDriverController() {
